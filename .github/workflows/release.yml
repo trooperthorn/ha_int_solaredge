@@ -138,9 +138,7 @@ jobs:
           fi
           gh release upload "$TAG" \
             dist/solaredge_v2.zip \
-            "dist/$WHEEL" \
             dist/solaredge_v2.spdx.json \
-            dist/elk_programmer.spdx.json \
             dist/SHA256SUMS \
             --repo "$GITHUB_REPOSITORY" \
             --clobber
