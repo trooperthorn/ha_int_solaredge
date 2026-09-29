@@ -1,0 +1,7 @@
+{"inverters": {"7E1234B5-67": {
+  "power": {"unit": "KW", "resolution": "QUARTER_HOUR", "values": [{"timestamp": "2026-09-29T12:15:00-05:00", "value": 4.25}, {"timestamp": "2026-09-29T12:30:00-05:00", "value": 4.31}]},
+  "energy": {"unit": "WH", "resolution": "QUARTER_HOUR", "values": [{"timestamp": "2026-09-29T12:15:00-05:00", "value": 1062.6}, {"timestamp": "2026-09-29T12:30:00-05:00", "value": 1077.7}]},
+  "voltage": {"unit": "VOLT", "values": [{"timestamp": "2026-09-29T12:30:00-05:00", "value": 241.2}]},
+  "current": {"unit": "AMPERE", "values": [{"timestamp": "2026-09-29T12:30:00-05:00", "value": 17.9}]},
+  "frequency": {"unit": "HERTZ", "values": [{"timestamp": "2026-09-29T12:30:00-05:00", "value": 60.01}]}
+}}}

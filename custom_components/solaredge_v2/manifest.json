@@ -1,0 +1,15 @@
+{
+  "domain": "solaredge_v2",
+  "name": "SolarEdge Monitoring API v2",
+  "codeowners": ["@trooperthorn"],
+  "config_flow": true,
+  "dependencies": ["application_credentials"],
+  "documentation": "https://github.com/trooperthorn/ha_int_solaredge",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/trooperthorn/ha_int_solaredge/issues",
+  "loggers": ["custom_components.solaredge_v2"],
+  "quality_scale": "platinum",
+  "requirements": [],
+  "version": "2026.09.29.1"
+}

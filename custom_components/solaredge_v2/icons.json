@@ -1,0 +1,23 @@
+{
+  "entity": {
+    "sensor": {
+      "current_power": { "default": "mdi:solar-power" },
+      "production_today": { "default": "mdi:solar-power-variant" },
+      "consumption_today": { "default": "mdi:home-lightning-bolt" },
+      "export_today": { "default": "mdi:transmission-tower-export" },
+      "import_today": { "default": "mdi:transmission-tower-import" },
+      "self_consumption_today": { "default": "mdi:home-battery" },
+      "to_storage_today": { "default": "mdi:battery-arrow-up" },
+      "from_storage_today": { "default": "mdi:battery-arrow-down" },
+      "lifetime_energy": { "default": "mdi:solar-power-variant-outline" },
+      "peak_power": { "default": "mdi:solar-panel-large" },
+      "last_update": { "default": "mdi:clock-check-outline" },
+      "open_alerts": {
+        "default": "mdi:alert-circle-outline",
+        "range": { "0": "mdi:check-circle-outline", "1": "mdi:alert-circle" }
+      },
+      "battery_charge_power": { "default": "mdi:battery-charging" },
+      "battery_discharge_power": { "default": "mdi:battery-minus" }
+    }
+  }
+}
