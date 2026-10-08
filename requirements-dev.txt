@@ -2,7 +2,7 @@
 ruff==0.16.10
 
 # Type checking
-mypy==2.3.1
+mypy==2.4.0
 
 # Home Assistant test harness; it pins pytest, pytest-asyncio, and pytest-cov
 # exactly, so they are not listed here.
