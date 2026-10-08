@@ -1,7 +1,7 @@
 {
   "name": "SolarEdge Monitoring API v2",
   "content_in_root": false,
-  "homeassistant": "2026.9.0",
+  "homeassistant": "2026.10.0",
   "render_readme": true,
   "zip_release": true,
   "filename": "solaredge_v2.zip"

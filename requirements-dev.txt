@@ -6,4 +6,4 @@ mypy==2.4.0
 
 # Home Assistant test harness; it pins pytest, pytest-asyncio, and pytest-cov
 # exactly, so they are not listed here.
-pytest-homeassistant-custom-component==0.13.368
+pytest-homeassistant-custom-component==0.13.371

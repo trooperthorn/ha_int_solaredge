@@ -149,9 +149,6 @@
     "auth_failed": {
       "message": "SolarEdge rejected the stored credentials; reauthentication is required."
     },
-    "oauth_implementation_missing": {
-      "message": "The application credentials used by this entry were removed; reauthenticate to pick new ones."
-    },
     "credit_limit": {
       "message": "The SolarEdge developer account has used its monthly API credits."
     },

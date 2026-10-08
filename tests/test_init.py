@@ -116,6 +116,8 @@ async def test_oauth_implementation_missing(hass: HomeAssistant, mock_api: MockA
     entry.add_to_hass(hass)
     await _setup(hass, entry)
     assert entry.state is ConfigEntryState.SETUP_ERROR
+    flows = hass.config_entries.flow.async_progress_by_handler(DOMAIN)
+    assert [flow["context"]["source"] for flow in flows] == ["reauth"]
 
 
 async def test_remove_device(
