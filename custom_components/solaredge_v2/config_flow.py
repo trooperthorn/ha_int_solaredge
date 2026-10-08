@@ -29,7 +29,7 @@ from homeassistant.helpers.selector import (
     TextSelectorConfig,
     TextSelectorType,
 )
-import voluptuous as vol
+import probatio
 
 from .api import (
     ApiKeyAuth,
@@ -60,12 +60,12 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-API_KEY_SCHEMA = vol.Schema(
-    {vol.Required(CONF_API_KEY): TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))}
+API_KEY_SCHEMA = probatio.Schema(
+    {probatio.Required(CONF_API_KEY): TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))}
 )
-SITE_ID_SCHEMA = vol.Schema(
+SITE_ID_SCHEMA = probatio.Schema(
     {
-        vol.Required(CONF_SITE_ID): NumberSelector(
+        probatio.Required(CONF_SITE_ID): NumberSelector(
             NumberSelectorConfig(min=1, step=1, mode=NumberSelectorMode.BOX)
         )
     }
@@ -214,8 +214,8 @@ class SolarEdgeFlowHandler(
         ]
         return self.async_show_form(
             step_id="select_site",
-            data_schema=vol.Schema(
-                {vol.Required(CONF_SITE_ID): SelectSelector(SelectSelectorConfig(options=options))}
+            data_schema=probatio.Schema(
+                {probatio.Required(CONF_SITE_ID): SelectSelector(SelectSelectorConfig(options=options))}
             ),
         )
 
@@ -315,9 +315,9 @@ class SolarEdgeOptionsFlow(OptionsFlowWithReload):
                 }
             )
         options = self.config_entry.options
-        schema = vol.Schema(
+        schema = probatio.Schema(
             {
-                vol.Required(
+                probatio.Required(
                     CONF_SCAN_INTERVAL_MINUTES,
                     default=options.get(
                         CONF_SCAN_INTERVAL_MINUTES, DEFAULT_SCAN_INTERVAL_MINUTES
@@ -331,7 +331,7 @@ class SolarEdgeOptionsFlow(OptionsFlowWithReload):
                         mode=NumberSelectorMode.BOX,
                     )
                 ),
-                vol.Required(
+                probatio.Required(
                     CONF_DEVICE_TELEMETRY,
                     default=options.get(CONF_DEVICE_TELEMETRY, DEFAULT_DEVICE_TELEMETRY),
                 ): BooleanSelector(),

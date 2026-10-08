@@ -1,5 +1,18 @@
 # Decisions
 
+## 2026-10-08: Minimum Home Assistant is 2026.10.0, schemas use probatio
+
+Core 2026.10 types flow, service and websocket schemas as probatio, so the
+voluptuous schemas failed mypy (developer blog 2026-09-30, "Probatio is our
+validation engine"). The integration now imports `probatio` directly, as core
+does; runtime behavior is unchanged because core has validated with probatio
+since 2026.9. The suite runs on core 2026.10.0 and `hacs.json` follows the
+tested core. Setup also stops translating OAuth2 implementation errors itself:
+since 2026.10 core raises `ConfigEntryNotReady` when the implementation is
+temporarily unavailable and `ConfigEntryAuthFailed` when it is gone (developer
+blog 2026-09-07), where the old `except ValueError` turned both into a reauth.
+Rejected: aliasing `probatio as vol`, which core's lint config bans.
+
 ## 2026-09-29: New domain `solaredge_v2` instead of overriding `solaredge`
 
 Rejected: shipping the custom integration under the core domain `solaredge`.
