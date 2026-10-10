@@ -5,7 +5,6 @@ from __future__ import annotations
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY, Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers import config_entry_oauth2_flow, device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -60,14 +59,9 @@ async def _async_auth_provider(
 ) -> AuthProvider:
     if entry.data.get(CONF_AUTH_TYPE) != AUTH_TYPE_OAUTH:
         return ApiKeyAuth(entry.data[CONF_API_KEY])
-    try:
-        implementation = await config_entry_oauth2_flow.async_get_config_entry_implementation(
-            hass, entry
-        )
-    except ValueError as err:
-        raise ConfigEntryAuthFailed(
-            translation_domain=DOMAIN, translation_key="oauth_implementation_missing"
-        ) from err
+    implementation = await config_entry_oauth2_flow.async_get_config_entry_implementation(
+        hass, entry
+    )
     session = config_entry_oauth2_flow.OAuth2Session(hass, entry, implementation)
 
     async def token() -> str:
