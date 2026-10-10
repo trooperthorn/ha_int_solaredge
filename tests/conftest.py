@@ -51,10 +51,11 @@ type MockApi = Callable[..., None]
 
 @pytest.fixture
 def mock_api(aioclient_mock: AiohttpClientMocker) -> MockApi:
-    """Register every endpoint; keyword arguments replace one route's status or body."""
+    """Register every endpoint; keyword arguments replace one route's status, body, or exception."""
 
     def _register(
-        headers: dict[str, str] | None = None, **overrides: int | dict[str, Any] | list[Any]
+        headers: dict[str, str] | None = None,
+        **overrides: int | dict[str, Any] | list[Any] | Exception,
     ) -> None:
         aioclient_mock.clear_requests()
         routes: dict[str, tuple[str, Any]] = {
@@ -71,7 +72,9 @@ def mock_api(aioclient_mock: AiohttpClientMocker) -> MockApi:
         }
         for name, (url, body) in routes.items():
             override = overrides.get(name)
-            if isinstance(override, int):
+            if isinstance(override, Exception):
+                aioclient_mock.get(url, exc=override)
+            elif isinstance(override, int):
                 aioclient_mock.get(
                     url,
                     status=override,

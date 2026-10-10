@@ -67,3 +67,27 @@ storage and an unversioned, unstable surface.
   update listener. Option changes reload through `OptionsFlowWithReload`, so
   `async_update_reload_and_abort` in reauth and reconfigure is the supported
   path.
+
+## 2026-10-09: Core V1 key-leak remediation applied as tests, not code
+
+The core `solaredge` integration logged its V1 site API key on a 503 (key in
+the query string, `ClientResponseError` printing the URL, generic coordinator
+logging `str(err)`, coordinator named by object repr, no backoff). Checked
+each remediation item against this integration:
+
+- Never interpolate an error that carries the URL: V2 credentials are header
+  only, and the client builds its own error text from status and problem
+  detail, so there is nothing to change.
+- Stable coordinator name: already `solaredge_v2 <site id>`.
+- Log once per outage: core's coordinator logs only on the success-to-failure
+  transition, and 429 responses already carry `retry_after`. Rejected: adding
+  a second backoff layer for 5xx, which would hide recovery and save no
+  credits that a 503 is known to cost.
+- Negative test: added `tests/test_secrets.py`, which fails the site call
+  and the token refresh with a 503 and a transport error for both access
+  types and asserts no credential reaches a log record, the coordinator's
+  `last_exception`, or a request URL. The test was verified against a
+  deliberate header leak in the client before the leak was reverted.
+
+The property is now enforced by test rather than by review; see
+[security.md](security.md).
