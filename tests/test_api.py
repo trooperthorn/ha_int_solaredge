@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from aiohttp import ClientError
 from homeassistant.core import HomeAssistant
@@ -34,8 +34,8 @@ from custom_components.solaredge_v2.api.models import (
 
 from .conftest import SITE, SITE_ID, MockApi
 
-START = datetime(2026, 9, 29)
-END = datetime(2026, 9, 29, 13, 5)
+START = datetime(2026, 9, 29, tzinfo=UTC)
+END = datetime(2026, 9, 29, 13, 5, tzinfo=UTC)
 
 
 def _client(hass: HomeAssistant) -> SolarEdgeClient:
@@ -62,7 +62,7 @@ async def test_reads_every_endpoint(
     power = await client.async_get_power(SITE_ID, START, END)
     assert power.latest_watts == pytest.approx(4310.7)
 
-    lifetime = await client.async_get_lifetime_energy(SITE_ID, datetime(2021, 4, 1), END)
+    lifetime = await client.async_get_lifetime_energy(SITE_ID, datetime(2021, 4, 1, tzinfo=UTC), END)
     assert lifetime == pytest.approx(41_500_000)
 
     devices = await client.async_get_devices(
@@ -86,14 +86,14 @@ async def test_reads_every_endpoint(
     device_call = next(c for c in aioclient_mock.mock_calls if str(c[1]).startswith(f"{SITE}/devices"))
     assert device_call[1].query.getall("types") == ["INVERTER", "METER", "BATTERY"]
     energy_call = next(c for c in aioclient_mock.mock_calls if str(c[1]).startswith(f"{SITE}/energy"))
-    assert energy_call[1].query["from"] == "2021-04-01T00:00:00"
+    assert energy_call[1].query["from"] == "2021-04-01T00:00:00Z"
     assert energy_call[1].query["resolution"] == "YEAR"
     power_call = next(c for c in aioclient_mock.mock_calls if str(c[1]).startswith(f"{SITE}/power"))
     assert dict(power_call[1].query) == {
         "resolution": "QUARTER_HOUR",
         "unit": "W",
-        "from": "2026-09-29T00:00:00",
-        "to": "2026-09-29T13:05:00",
+        "from": "2026-09-29T00:00:00Z",
+        "to": "2026-09-29T13:05:00Z",
     }
     inverter_call = next(c for c in aioclient_mock.mock_calls if "/inverters/" in str(c[1]))
     assert inverter_call[1].query["resolution"] == "HOUR"

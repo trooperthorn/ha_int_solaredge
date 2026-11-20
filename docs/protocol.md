@@ -59,8 +59,12 @@ shape. Nothing in this table has been verified against the live API yet; see
 | `GET /sites/{id}/meters/telemetry` | same | Documented, tested |
 | `GET /sites/{id}/storage/telemetry` | same | Documented, tested |
 
-Date parameters are ISO 8601 date-times without an offset, interpreted in site
-local time (documented worked example: `from=2026-05-01T00:00:00`).
+Date parameters are parsed as an `Instant`: an ISO 8601 date-time with `Z` or an
+offset. A date-time without a zone (`from=2026-05-01T00:00:00`) is rejected with
+HTTP 400 `Failed to convert [...] to required type [Instant] for field [from]`
+(observed against the live API, November 2026). The integration computes window
+bounds in site wall-clock time and sends them as UTC instants, e.g.
+`from=2026-04-30T22:00:00Z` for midnight in Europe/Amsterdam.
 
 ## Response shapes and units
 

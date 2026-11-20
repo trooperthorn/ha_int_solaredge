@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, tzinfo
 from typing import TYPE_CHECKING
 
 from aiohttp import ClientError
@@ -95,11 +95,11 @@ class SolarEdgeCoordinator(DataUpdateCoordinator[SiteData]):
                 self._remove_stale_devices()
             if self._due(self._last_slow, SLOW_UPDATE_INTERVAL, now):
                 data.metadata = await self.client.async_get_site(self.site_id)
-                if data.metadata.installation_date is not None:
+                if (installed := data.metadata.installation_date) is not None:
+                    if installed.tzinfo is None:
+                        installed = installed.replace(tzinfo=self._site_tz())
                     data.lifetime_energy = await self.client.async_get_lifetime_energy(
-                        self.site_id,
-                        data.metadata.installation_date.replace(tzinfo=None),
-                        self._site_now(),
+                        self.site_id, installed, self._site_now()
                     )
                 data.open_alerts = await self.client.async_get_open_alerts(self.site_id)
                 self._last_slow = now
@@ -145,11 +145,14 @@ class SolarEdgeCoordinator(DataUpdateCoordinator[SiteData]):
         else:
             ir.async_delete_issue(self.hass, DOMAIN, self._issue_id(ISSUE_SCOPE_MISSING))
 
-    def _site_now(self) -> datetime:
-        """Wall-clock time at the site, without an offset, as the API's from/to expect."""
+    def _site_tz(self) -> tzinfo:
+        """The site's time zone, falling back to Home Assistant's."""
         zone = self.data.metadata.timezone if self.data else None
-        tz = (dt_util.get_time_zone(zone) if zone else None) or dt_util.get_default_time_zone()
-        return dt_util.now(tz).replace(tzinfo=None, microsecond=0)
+        return (dt_util.get_time_zone(zone) if zone else None) or dt_util.get_default_time_zone()
+
+    def _site_now(self) -> datetime:
+        """Aware current time in the site's zone, so day windows start at site midnight."""
+        return dt_util.now(self._site_tz()).replace(microsecond=0)
 
     def _translate_errors(self) -> _ErrorTranslator:
         return _ErrorTranslator(self)
