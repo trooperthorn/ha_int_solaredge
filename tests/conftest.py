@@ -16,8 +16,8 @@ from homeassistant.const import CONF_API_KEY
 from homeassistant.core import HomeAssistant
 from homeassistant.setup import async_setup_component
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+from pytest_homeassistant.common import MockConfigEntry
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
 
 from custom_components.solaredge_v2.api import BASE_URL
 from custom_components.solaredge_v2.const import (
@@ -39,11 +39,6 @@ CLIENT_SECRET = "client-secret"
 def load(name: str) -> Any:
     """Load a JSON fixture."""
     return json.loads((FIXTURES / name).read_text(encoding="utf-8"))
-
-
-@pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
-    """Allow custom_components to load in every test."""
 
 
 type MockApi = Callable[..., None]
