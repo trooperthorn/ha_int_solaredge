@@ -1,5 +1,24 @@
 # Decisions
 
+## 2026-11-23: Test harness is `pytest-homeassistant`
+
+`pytest-homeassistant-custom-component` stopped at 0.13.375, which pins core
+2026.10.4; its README points to `pytest-homeassistant`, published from
+home-assistant/core. Core 2026.11 aliases httpx to httpx2 at import, and the
+old plugin fails to load against it ("httpx was already imported"), so the
+suite could not run on 2026.11 at all. The suite now uses
+`pytest-homeassistant==2026.11.1` with core 2026.11.1. Following the package
+README: imports renamed to `pytest_homeassistant`, `-p no:respx` and a
+function-scoped asyncio fixture loop set in `pytest.ini`, and the autouse
+`enable_custom_integrations` wrapper removed because `hass` enables custom
+integrations by default. The new harness does not depend on `pytest-cov`, so
+it is pinned in `requirements-dev.txt` to keep the 100 percent coverage gate.
+The harness pins its core exactly, so the harness pin, the core pin, and the
+static version assert in `test.yml` move together; Dependabot groups the two
+packages so one pull request bumps both. Rejected: staying on core 2026.10,
+which leaves the suite on an unsupported core; computing the asserted version
+from the requirements file, which would make the guard agree with any drift.
+
 ## 2026-10-08: Minimum Home Assistant is 2026.10.0, schemas use probatio
 
 Core 2026.10 types flow, service and websocket schemas as probatio, so the

@@ -54,9 +54,13 @@ python3.14 -m venv ~/solaredgevenv
 ~/solaredgevenv/bin/pip install -r requirements-core.txt
 ```
 
-The harness pins the beta core it was cut from, so the stable core is pinned
-in its own file and installed second; CI asserts the installed version. Then,
-from the repository root:
+The harness is `pytest-homeassistant`, published from home-assistant/core. Each
+release pins the core version it was cut from, so `requirements-dev.txt`
+(harness), `requirements-core.txt` (core), and the version literal asserted in
+`.github/workflows/test.yml` must all name the same release and are bumped
+together. The harness needs Python 3.14.2 or later. `pytest.ini` passes
+`-p no:respx` so Home Assistant installs its httpx alias before respx is
+imported. Then, from the repository root:
 
 ```bash
 ~/solaredgevenv/bin/ruff check .

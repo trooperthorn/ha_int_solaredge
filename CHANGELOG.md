@@ -13,6 +13,9 @@
   docs/security.md (Logs) and docs/decisions.md.
 - Test fixture `mock_api` accepts an exception to fail a route at the
   transport level.
+- The suite runs on Home Assistant 2026.11.1 with the `pytest-homeassistant`
+  harness, replacing `pytest-homeassistant-custom-component`; see
+  docs/decisions.md.
 
 ## 2026.09.29.2
 

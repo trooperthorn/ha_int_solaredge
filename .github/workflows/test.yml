@@ -22,11 +22,12 @@ jobs:
           python-version: "3.14"
           cache: pip
           cache-dependency-path: requirements-dev.txt
-      # The harness pins the beta core it was cut from, so the stable core is
-      # pinned in its own file and installed second; the assert proves it.
+      # pytest-homeassistant pins the core release it was cut from. The core
+      # pin in requirements-core.txt must name the same version; the assert
+      # below is a static literal so a drift in either file fails the job.
       - name: Install the test harness
         run: pip install -r requirements-dev.txt
-      - name: Pin the stable core over the harness
+      - name: Install the pinned core
         run: pip install -r requirements-core.txt
       - name: Verify runtime versions
         run: python -c "from importlib.metadata import version; import sys; print(version('homeassistant')); assert version('homeassistant') == '2026.11.1'; assert sys.version_info[:2] == (3, 14)"

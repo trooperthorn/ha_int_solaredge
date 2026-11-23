@@ -10,9 +10,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
 from homeassistant.setup import async_setup_component
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
-from pytest_homeassistant_custom_component.typing import WebSocketGenerator
+from pytest_homeassistant.common import MockConfigEntry
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
+from pytest_homeassistant.typing import WebSocketGenerator
 
 from custom_components.solaredge_v2.const import DOMAIN, OAUTH2_TOKEN
 from custom_components.solaredge_v2.diagnostics import async_get_config_entry_diagnostics
