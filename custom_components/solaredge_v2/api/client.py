@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Sequence
-from datetime import datetime
+from datetime import UTC, datetime
 from http import HTTPStatus
 from typing import Any
 
@@ -174,11 +174,19 @@ class SolarEdgeClient:
 
 
 def _window(start: datetime, end: datetime) -> list[tuple[str, str]]:
-    """Format a window as the site-local, offset-free timestamps the API expects."""
-    return [
-        ("from", start.strftime("%Y-%m-%dT%H:%M:%S")),
-        ("to", end.strftime("%Y-%m-%dT%H:%M:%S")),
-    ]
+    """Format a window as the UTC instants the API expects.
+
+    The V2 API parses from/to as an Instant: a timestamp without a zone or
+    offset is rejected with HTTP 400, so both ends must be timezone-aware.
+    """
+    return [("from", _instant(start)), ("to", _instant(end))]
+
+
+def _instant(value: datetime) -> str:
+    """Format an aware datetime as an ISO 8601 UTC instant, e.g. 2026-09-29T05:00:00Z."""
+    if value.tzinfo is None:
+        raise ValueError("SolarEdge API windows need timezone-aware datetimes")
+    return value.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 async def _error_for(response: ClientResponse) -> SolarEdgeResponseError:

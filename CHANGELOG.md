@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Fixed setup failing with HTTP 400 `Failed to convert [...] to required type
+  [Instant] for field [from]`. The V2 API requires `from`/`to` as instants with
+  a zone; window bounds are still computed in site wall-clock time but are now
+  sent as UTC (`...Z`).
 - Added tests proving that the API key, access token, refresh token, and
   client secret never reach a log line, an error message, or a request URL
   when the site call or the token refresh fails. Prompted by the core V1

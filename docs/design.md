@@ -57,7 +57,8 @@ is the binding constraint, so data is split by how fast it changes.
 `_async_setup` loads metadata and inventory once so entities exist before the
 first refresh, and the first refresh then fetches the slow data immediately.
 
-Every time-series call sends an explicit window in site wall-clock time, taken
+Every time-series call sends an explicit window whose bounds are computed in site
+wall-clock time (and sent as UTC instants, see protocol.md), taken
 from the site's `location.timezone` (Home Assistant's zone as a fallback),
 because the API's default window runs from midnight and exceeds the 12-hour
 limit for 15-minute buckets after noon. Site power reads the last hour at 15
