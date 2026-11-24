@@ -7,7 +7,7 @@ mypy==2.4.1
 # Home Assistant test harness, published from home-assistant/core. Each release
 # pins the matching homeassistant, pytest, and pytest-asyncio exactly, so they
 # are not listed here; keep its version equal to requirements-core.txt.
-pytest-homeassistant==2026.11.1
+pytest-homeassistant==2026.11.2
 
 # Coverage gate; the harness does not depend on it.
 pytest-cov==7.1.0
